@@ -438,7 +438,7 @@ ggplot_beta2_drake <- function(Hm, lut_gensp, included_variables = NA, lut_ivars
                           alpha = exp(abs(median_value))^3))+
     facet_wrap(~var, scales = "free_x", nrow=1, ncol=length(unique(mbc$var))) +
     scale_alpha_continuous(range = c(0,1.25*(1/length(unique(mbc$Chain)))))+
-    theme_classic() +
+    theme_clean() +
     # geom_text(data = data.frame(lab = c("Introduced","Native"),
     #                             x=c(9,9),Chain = NA,
     #                             y = c(5,15)),
@@ -526,7 +526,7 @@ ggplot_gamma <- function(Hm, support_level = 0.89, no_intercept = TRUE,
   p_gamma <- supported_gamma %>%
     ggplot(aes(x=env_var,y=(Trait), fill = Mean, color = sign)) +
     geom_tile(lwd=.5) +
-    theme_pubclean()+
+    theme_clean()+
     scale_fill_steps2(name = "Mean\nEffect\nSize") +
     scale_color_manual(values = c(("red"), ("blue"))) +
     guides(color = "none")+
@@ -567,7 +567,7 @@ ggplot_gamma2 <- function(Hm, lut_varnames = NA){
     ggdist::stat_dist_interval(alpha=0.5) +
     facet_wrap(~var, scales = "free_x", nrow=2, 
                ncol=ceiling(length(unique(mbc$var))/2)) +
-    theme_classic() +
+    theme_clean() +
     guides(fill="none")+
     geom_vline(xintercept=0, col="black", lty=2) +
     xlab("Effect on Occurrence Probability") +

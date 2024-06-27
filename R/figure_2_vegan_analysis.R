@@ -4,6 +4,7 @@ library(vegan)
 library(ggrepel)
 library(ggpubr)
 library(Hmsc)
+library(ggthemes)
 
 # data ingest ==================================================================
 raw <- read_csv("data/drake_veg_data_2022 - cover_2022(1).csv")
@@ -70,7 +71,7 @@ p_ab <- ggplot(site_scores, aes(x=NMDS1, y=NMDS2)) +
   geom_text_repel(data = species,size=4, aes(label = species), color = "grey40") +
   scale_color_manual(values = c("chocolate4", "turquoise3")) +
   stat_ellipse(aes(color = CRP_year), key_glyph="rect") +
-  theme_classic() +
+  theme_clean() +
   theme(panel.background = element_rect(fill="transparent", color = "black"),
         legend.position = "none") +
   ggtitle("Abundance-Based")
@@ -103,7 +104,7 @@ p_oc <- ggplot(site_scores_pa, aes(x=NMDS1, y=NMDS2)) +
                aes(yend = NMDS2, xend = NMDS1), lwd=1)+
   geom_text_repel(data = species_pa,size=4, aes(label = species), color = "grey40") +
   stat_ellipse(aes(color = CRP_year), key_glyph="rect") +
-  theme_classic() +
+  theme_clean() +
   scale_color_manual(name = "CRP\nYear",values = c("chocolate4", "turquoise3")) +
   theme(panel.background = element_rect(fill="transparent", color = "black"),
         legend.position = c(0,0),
@@ -164,7 +165,6 @@ pc_native <- raw %>%
 #   ggplot(aes(x=type, y=value)) +
 #   geom_boxplot() +
 #   ggtitle("Total Shannon Diversity")
-
 ggarrange(
   vegan::diversity(pc_native) %>%
     as_tibble(rownames = "plot") %>%
@@ -172,7 +172,8 @@ ggarrange(
     mutate(CRP_year = ifelse(type == "herb", "2014", "2013")) %>%
     ggplot(aes(x=CRP_year, y=value, fill=CRP_year)) +
     geom_violin(draw_quantiles = 0.5, trim=F)+
-    theme_classic() +
+    theme_clean() +
+    theme(panel.background = element_rect(linewidth = 2, color = "black"))+
     scale_fill_manual(values = c("chocolate4", "turquoise3")) +
     guides(fill="none") +
     labs(x = "CRP Application Year", y = "Native Shannon Diversity")
@@ -183,7 +184,8 @@ ggarrange(
     mutate(CRP_year = ifelse(type == "herb", "2014", "2013")) %>%
     ggplot(aes(x=CRP_year, y=value, fill=CRP_year)) +
     geom_violin(draw_quantiles = 0.5, trim=F)+
-    theme_classic() +
+    theme_clean() +
+    theme(panel.background = element_rect(linewidth = 2, color = "black")) +
     scale_fill_manual(values = c("chocolate4", "turquoise3")) +
     guides(fill="none") +
     labs(x = "CRP Application Year", y = "Native Species Richness")
@@ -191,7 +193,7 @@ ggarrange(
   nrow=2, ncol=1) %>%
   ggsave("figs/diversity_by_strip.png", plot=., width=8.5, height=3.5, bg="white")
 
-ggarrange(p_ab, p_oc, labels = "auto", widths = c(1,1.09)) %>%
+ggarrange(p_ab, p_oc, labels = "auto", widths = c(1.016,1.09)) %>%
   ggarrange(., ggarrange(
     vegan::diversity(pc_native) %>%
       as_tibble(rownames = "plot") %>%
@@ -199,7 +201,7 @@ ggarrange(p_ab, p_oc, labels = "auto", widths = c(1,1.09)) %>%
       mutate(CRP_year = ifelse(type == "herb", "2014", "2013")) %>%
       ggplot(aes(x=CRP_year, y=value, fill=CRP_year)) +
       geom_violin(draw_quantiles = 0.5, trim=F)+
-      theme_classic() +
+      theme_clean() +
       scale_y_continuous(breaks =c(0,1,2)) +
       scale_fill_manual(values = c("chocolate4", "turquoise3"))+
       guides(fill="none") +
@@ -211,13 +213,13 @@ ggarrange(p_ab, p_oc, labels = "auto", widths = c(1,1.09)) %>%
       mutate(CRP_year = ifelse(type == "herb", "2014", "2013")) %>%
       ggplot(aes(x=CRP_year, y=value, fill=CRP_year)) +
       geom_violin(draw_quantiles = 0.5, trim=F)+
-      theme_classic() +
+      theme_clean() +
       scale_fill_manual(values = c("chocolate4", "turquoise3")) +
       guides(fill="none") +
       labs(x = "CRP Application Year", y = "Native\nSpecies Richness")
     , 
-    nrow=2, ncol=1, labels = c("      c", "      d")), nrow=1, ncol=2, widths = c(3,1.25)) %>%
-  ggsave("figs/diversity_nmds.png", plot=., width=12, height=4, bg="white")
+    nrow=2, ncol=1, labels = c("         c", "         d")), nrow=1, ncol=2, widths = c(3,1.25)) %>%
+  ggsave("figs/diversity_nmds.pdf", plot=., width=12, height=4, bg="white", dpi=600)
 
 # # extra analysis not in paper
 # vegan::diversity(pc_notnative) %>%

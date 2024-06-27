@@ -25,7 +25,7 @@ lut_ivars <-c("3. Winter SM (DJF)", "5. Spring SM (MA)", "1. Fall SM (SON)",
               "1. Spring SM (MJ)", "3. Summer SM (JAS)","5. Fall SM (OND)",
               "4. Summer ST (JAS)", "6. Fall ST (OND)", "2. Spring ST (MJ)", 
               "4. Winter ST (DJF)","6. Spring ST (MA)", "2. Fall ST (SON)",
-              "TWI", "Bare Ground", "CRP Year", "Soil N")
+              "8. TWI", "Bare Ground", "CRP Year", "7. Soil N")
 
 names(lut_ivars) <-   c("soil_moisture_pre_djf_30cm",  "soil_moisture_pre_ma_30cm",
                         "soil_moisture_pre_son_30cm",  "soil_moisture_post_mj_30cm",  
@@ -80,7 +80,9 @@ ggplot_gamma2(mj) %>%
 ggplot_gamma(mj, lut_vars = lut_tvars, title = "Trait Associations") %>%
   ggsave(filename = "figs/gamma.png", 
          plot=., width=5, height=5, bg="white")
-
+ggplot_gamma(mj, lut_vars = lut_tvars, title = "Trait Associations") %>%
+  ggsave(filename = "figs/gamma.pdf", 
+         plot=., width=5, height=5, bg="white", dpi=600)
 
 pb1<- ggplot_beta2_drake(mj, 
                    lut_gensp = lut_gensp,
@@ -89,6 +91,7 @@ pb1<- ggplot_beta2_drake(mj,
   ggtitle("Conditions Before Seeding")
 
 ggsave(plot = pb1, filename = "figs/beta2_before.png", width = 12, height=6, bg = "white")
+ggsave(plot = pb1, filename = "figs/beta2_before.pdf", width = 12, height=6, bg = "white", dpi = 600)
 
 pb2 <- ggplot_beta2_drake(mj, 
                    lut_gensp = lut_gensp,
@@ -96,6 +99,7 @@ pb2 <- ggplot_beta2_drake(mj,
                    lut_ivars = lut_ivars) +
   ggtitle("Conditions After Seeding")
 ggsave(plot = pb2, filename = "figs/beta2_after.png", width = 10, height=6, bg = "white")
+ggsave(plot = pb2, filename = "figs/beta2_after.pdf", width = 10, height=6, bg = "white", dpi = 600)
 
 pb3 <- ggplot_beta2_drake(mj, 
                    lut_gensp = lut_gensp_f,
@@ -118,3 +122,4 @@ p_omega <- ggplot_omega(mj,hc.method = "centroid", hc.order = TRUE,
   geom_text(label = "Group 1", x=3, y=4, size=10);p_omega
 
 ggsave(filename = "figs/omega.png", plot= p_omega, width=9, height=9, bg="white")
+ggsave(filename = "figs/omega.pdf", plot= p_omega, width=9, height=9, bg="white", dpi=600)
