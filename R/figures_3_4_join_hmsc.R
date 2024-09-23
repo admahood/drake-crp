@@ -88,10 +88,13 @@ pb1<- ggplot_beta2_drake(mj,
                    lut_gensp = lut_gensp,
                    included_variables = ivars_pre,
                    lut_ivars = lut_ivars) +
-  ggtitle("Conditions Before Seeding")
+  ggtitle("Conditions Before Seeding") +
+  theme(strip.text = element_text(size=10, hjust = 0),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 12))
 
 ggsave(plot = pb1, filename = "figs/beta2_before.png", width = 12, height=6, bg = "white")
-ggsave(plot = pb1, filename = "figs/beta2_before.pdf", width = 12, height=6, bg = "white", dpi = 600)
+ggsave(plot = pb1, filename = "figs/figure_3_beta2_before.pdf", width = 12, height=6, bg = "white", dpi = 600)
 
 pb2 <- ggplot_beta2_drake(mj, 
                    lut_gensp = lut_gensp,

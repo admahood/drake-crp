@@ -221,51 +221,32 @@ ggarrange(p_ab, p_oc, labels = "auto", widths = c(1.016,1.09)) %>%
     nrow=2, ncol=1, labels = c("         c", "         d")), nrow=1, ncol=2, widths = c(3,1.25)) %>%
   ggsave("figs/diversity_nmds.pdf", plot=., width=12, height=4, bg="white", dpi=600)
 
-# # extra analysis not in paper
-# vegan::diversity(pc_notnative) %>%
-#   as_tibble(rownames = "plot") %>%
-#   tidyr::separate(plot, c("d", "n", "type", "strip"),sep = "_") %>%
-#   ggplot(aes(x=type, y=value)) +
-#   geom_boxplot()+
-#   ggtitle("Introduced Shannon Diversity")
-# 
-# 
-# # which species is the most abundant by plot
-# 
-# dom_spp <- plant_cover %>%
-#   dplyr::select(cover_pct, species_code, plot, n_subplots) %>%
-#   group_by(plot, species_code) %>%
-#   summarise(cover_pct = sum(cover_pct)/n_subplots) %>%
-#   unique()%>%
-#   ungroup() %>%
-#   group_by(plot) %>%
-#   filter(cover_pct == max(cover_pct)) %>%
-#   dplyr::select(plot, dominant_sp = species_code)
-# 
-# vegan::specnumber(pc_native) %>%
-#   as_tibble(rownames = "plot") %>%
-#   tidyr::separate(plot, c("d", "n", "type", "strip"),sep = "_",remove = F) %>%
-#   mutate(CRP_year = ifelse(type == "herb", "2014", "2013")) %>%
-#   left_join(dom_spp) %>%
-#   mutate(dom_sp = ifelse(dominant_sp %in% c("satr", "elre", "brte", "kosc", "atca", "bocu"),
-#                          dominant_sp, "other")) %>%
-#   ggplot(aes(x=dom_sp, y=value)) +
-#   geom_violin(draw_quantiles = 0.5, trim=F)+
-#   theme_classic() +
-#   guides(fill="none") +
-#   labs(x = "Dominant_sp", y = "Native Shannon Diversity")
-# 
-# vegan::diversity(pc_native) %>%
-#   as_tibble(rownames = "plot") %>%
-#   tidyr::separate(plot, c("d", "n", "type", "strip"),sep = "_",remove = F) %>%
-#   mutate(CRP_year = ifelse(type == "herb", "2014", "2013")) %>%
-#   left_join(dom_spp) %>%
-#   mutate(dom_sp = ifelse(dominant_sp %in% c("satr", "elre", "brte", "kosc", "atca", "bocu"),
-#                          dominant_sp, "other")) %>%
-#   ggplot(aes(x=dom_sp, y=value)) +
-#   geom_violin(draw_quantiles = 0.5, trim=F)+
-#   theme_classic() +
-#   guides(fill="none") +
-#   labs(x = "Dominant_sp", y = "Native Shannon Diversity")
-# table(dom_spp$dominant_sp)
-# 
+#vertical alignment 
+ggarrange(p_ab, p_oc, labels = "auto", heights = c(1.07,1), nrow = 2, ncol =1) %>%
+  ggarrange(., ggarrange(
+    vegan::diversity(pc_native) %>%
+      as_tibble(rownames = "plot") %>%
+      tidyr::separate(plot, c("d", "n", "type", "strip"),sep = "_") %>%
+      mutate(CRP_year = ifelse(type == "herb", "2014", "2013")) %>%
+      ggplot(aes(x=CRP_year, y=value, fill=CRP_year)) +
+      geom_violin(draw_quantiles = 0.5, trim=F)+
+      theme_clean() +
+      scale_y_continuous(breaks =c(0,1,2)) +
+      scale_fill_manual(values = c("chocolate4", "turquoise3"))+
+      guides(fill="none") +
+      labs(x = "CRP Application Year", y = "Native\nShannon Diversity")
+    ,
+    vegan::specnumber(pc_native) %>%
+      as_tibble(rownames = "plot") %>%
+      tidyr::separate(plot, c("d", "n", "type", "strip"),sep = "_") %>%
+      mutate(CRP_year = ifelse(type == "herb", "2014", "2013")) %>%
+      ggplot(aes(x=CRP_year, y=value, fill=CRP_year)) +
+      geom_violin(draw_quantiles = 0.5, trim=F)+
+      theme_clean() +
+      scale_fill_manual(values = c("chocolate4", "turquoise3")) +
+      guides(fill="none") +
+      labs(x = "CRP Application Year", y = "Native\nSpecies Richness")
+    , 
+    nrow=1, ncol=2, labels = c("         c", "         d")), nrow=2, ncol=1, heights = c(3.1,1.2)) %>%
+  ggsave("figs/figure_2_diversity_nmds_vertical.pdf", plot=., width=5, height=13, bg="white", dpi=600)
+

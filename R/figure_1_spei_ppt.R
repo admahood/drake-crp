@@ -24,12 +24,14 @@ p1<- spei %>%
   ggplot(aes(x=date, y=spei)) +
   geom_hline(yintercept = 0, color = "black") +
   geom_hline(yintercept = c(2,-2,1, -1), color = "grey", lty=3) +
-  geom_labelvline(xintercept = as.Date("2013-04-29"), col="grey40", label = "CRP", hjust=.95, lty=2) +
-  geom_labelvline(xintercept = as.Date("2014-05-01"), col="grey40", label = "CRP", hjust=0.05, lty=2) +
+  geom_textvline(xintercept = as.Date("2013-04-29"), col="grey40", label = "CRP", hjust=.95, lty=2) +
+  geom_textvline(xintercept = as.Date("2014-05-01"), col="grey40", label = "CRP", hjust=0.05, lty=2) +
   geom_line() +
   xlab("Year") +
   ylab("12 Month SPEI")+
-  theme_classic() 
+  theme_classic() +
+  theme(axis.text = element_text(size=12),
+        axis.title = element_text(size=12))
 
 
 precip <- read_csv('data/monthly_precip.csv') %>%
@@ -46,14 +48,17 @@ precip <- read_csv('data/monthly_precip.csv') %>%
 p_raw<-ggplot(precip, aes(x=as.factor(nmonth), y=value, fill=as.factor(year))) +
   geom_bar(stat = "identity", position="dodge") +
   theme_classic() +
-  geom_labelvline(xintercept = 4.5, col="grey40", label = "CRP", hjust=.95, lty=2) +
+  geom_textvline(xintercept = 4.5, col="grey40", label = "CRP", hjust=.95, lty=2) +
   scale_color_discrete(name = "Year") +
   xlab("Month") +
   ylab("Precipitation (mm)") +
   scale_fill_manual(values = c("chocolate4", "turquoise3")) +
   theme(legend.position = c(1,1),
+        axis.text = element_text(size=12),
+        legend.text = element_text(size=12),
+        axis.title = element_text(size=12),
         legend.title = element_blank(),
         legend.justification = c(1,1)) 
 
 ggarrange(p1, p_raw, ncol=1, nrow=2, heights = c(1,1)) %>%
-  ggsave(plot=., filename = "figs/precip_spei.png", height=4, width=7, bg="white")
+  ggsave(plot=., filename = "figs/precip_spei.png", height=3.1, width=5.25, bg="white")
