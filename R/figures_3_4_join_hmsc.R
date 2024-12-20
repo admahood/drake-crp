@@ -88,7 +88,9 @@ pb1<- ggplot_beta2_drake(mj,
                    lut_gensp = lut_gensp,
                    included_variables = ivars_pre,
                    lut_ivars = lut_ivars) +
-  ggtitle("Conditions Before Seeding") +
+  ggtitle("Conditions Before Seeding")
+
+pb1 <- pb1 +
   theme(strip.text = element_text(size=10, hjust = 0),
         axis.title = element_text(size = 12),
         axis.text = element_text(size = 12))
